@@ -3,7 +3,7 @@ pandas==2.2.1
 plotly==5.20.0
 requests==2.31.0
 xmltodict==0.13.0
-google-generativeai==0.6.2
+google-generativeai==0.6.0
 networkx==3.3
-papaparse==0.4.4  # 필요한 경우 라이브러리 선택
 typing==3.7.4
+tenacity==8.2.3
