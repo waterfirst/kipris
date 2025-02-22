@@ -201,112 +201,7 @@ def analyze_yearly_keywords(df: pd.DataFrame) -> dict:
         }
     
     return yearly_keywords
-def create_keyword_trend_visualization(yearly_keywords: dict) -> go.Figure:
-    """연도별 키워드 트렌드를 시각화합니다."""
-    fig = go.Figure()
-    
-    # px.colors.qualitative.Set3 대신 수동으로 컬러 팔레트 정의
-    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
-              '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
-    
-    # 전체 기간 동안의 상위 키워드 추출
-    all_keywords = set()
-    for year_data in yearly_keywords.values():
-        all_keywords.update(year_data['keywords'][:5])  # 상위 5개만 사용
-    
-    # 각 키워드별 연도별 빈도 추적
-    for idx, keyword in enumerate(all_keywords):
-        years = []
-        counts = []
-        for year in sorted(yearly_keywords.keys()):
-            year_data = yearly_keywords[year]
-            try:
-                idx_in_year = year_data['keywords'].index(keyword)
-                count = year_data['counts'][idx_in_year]
-            except ValueError:
-                count = 0
-            years.append(year)
-            counts.append(count)
-            
-        fig.add_trace(go.Scatter(
-            x=years,
-            y=counts,
-            name=keyword,
-            mode='lines+markers',
-            line=dict(color=colors[idx % len(colors)]),
-            marker=dict(size=8)
-        ))
-    
-    fig.update_layout(
-        title="연도별 주요 키워드 트렌드",
-        xaxis_title="연도",
-        yaxis_title="키워드 출현 빈도",
-        showlegend=True,
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1
-        ),
-        paper_bgcolor=COLORS["background"],
-        plot_bgcolor=COLORS["background"],
-        font=dict(color=COLORS["text"]),
-    )
-    
-    return fig
-def create_keyword_trend_visualization(yearly_keywords: dict) -> go.Figure:
-    """연도별 키워드 트렌드를 시각화합니다."""
-    fig = go.Figure()
-    
-    colors = px.colors.qualitative.Set3
-    
-    # 전체 기간 동안의 상위 키워드 추출
-    all_keywords = set()
-    for year_data in yearly_keywords.values():
-        all_keywords.update(year_data['keywords'][:5])  # 상위 5개만 사용
-    
-    # 각 키워드별 연도별 빈도 추적
-    for idx, keyword in enumerate(all_keywords):
-        years = []
-        counts = []
-        for year in sorted(yearly_keywords.keys()):
-            year_data = yearly_keywords[year]
-            try:
-                idx_in_year = year_data['keywords'].index(keyword)
-                count = year_data['counts'][idx_in_year]
-            except ValueError:
-                count = 0
-            years.append(year)
-            counts.append(count)
-            
-        fig.add_trace(go.Scatter(
-            x=years,
-            y=counts,
-            name=keyword,
-            mode='lines+markers',
-            line=dict(color=colors[idx % len(colors)]),
-            marker=dict(size=8)
-        ))
-    
-    fig.update_layout(
-        title="연도별 주요 키워드 트렌드",
-        xaxis_title="연도",
-        yaxis_title="키워드 출현 빈도",
-        showlegend=True,
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1
-        ),
-        paper_bgcolor=COLORS["background"],
-        plot_bgcolor=COLORS["background"],
-        font=dict(color=COLORS["text"]),
-    )
-    
-    return fig
+
 
 def analyze_ipc_codes(df: pd.DataFrame) -> pd.DataFrame:
     """IPC 코드를 분석하여 기술 분야별 분포를 파악합니다."""
@@ -390,6 +285,170 @@ def create_ipc_visualization(ipc_analysis: pd.DataFrame) -> go.Figure:
     )
     
     return fig
+
+def create_keyword_trend_visualization(yearly_keywords: dict) -> go.Figure:
+    """연도별 키워드 트렌드를 시각화합니다."""
+    fig = go.Figure()
+    
+    # 컬러 팔레트 정의
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
+              '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    
+    all_keywords = set()
+    for year_data in yearly_keywords.values():
+        all_keywords.update(year_data['keywords'][:5])
+    
+    for idx, keyword in enumerate(all_keywords):
+        years = []
+        counts = []
+        for year in sorted(yearly_keywords.keys()):
+            year_data = yearly_keywords[year]
+            try:
+                idx_in_year = year_data['keywords'].index(keyword)
+                count = year_data['counts'][idx_in_year]
+            except ValueError:
+                count = 0
+            years.append(year)
+            counts.append(count)
+            
+        fig.add_trace(go.Scatter(
+            x=years,
+            y=counts,
+            name=keyword,
+            mode='lines+markers',
+            line=dict(color=colors[idx % len(colors)], width=2),
+            marker=dict(size=8)
+        ))
+    
+    fig.update_layout(
+        title=dict(
+            text="연도별 주요 키워드 트렌드",
+            font=dict(size=20)
+        ),
+        xaxis=dict(
+            title="연도",
+            showgrid=True,
+            gridwidth=1,
+            gridcolor='#E4E4E4',
+            tickfont=dict(size=12),
+        ),
+        yaxis=dict(
+            title="키워드 출현 빈도",
+            showgrid=True,
+            gridwidth=1,
+            gridcolor='#E4E4E4',
+            tickfont=dict(size=12),
+        ),
+        showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ),
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        font=dict(
+            color='#2E2E2E',
+            size=14
+        ),
+        margin=dict(t=100)
+    )
+    
+    return fig
+
+def create_ipc_visualization(ipc_analysis: pd.DataFrame) -> go.Figure:
+    """IPC 분석 결과를 시각화합니다."""
+    fig = go.Figure()
+    
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
+              '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    
+    # Section별로 그룹화하여 시각화
+    for idx, section in enumerate(sorted(ipc_analysis['section'].unique())):
+        section_data = ipc_analysis[ipc_analysis['section'] == section]
+        fig.add_trace(go.Bar(
+            name=ipc_descriptions.get(section, '기타'),
+            x=section_data['ipc'],
+            y=section_data['count'],
+            text=section_data['description'],
+            marker_color=colors[idx % len(colors)],
+            hovertemplate=
+            'IPC: %{x}<br>'+
+            '건수: %{y}<br>'+
+            '분야: %{text}<br>'+
+            '<extra></extra>'
+        ))
+    
+    fig.update_layout(
+        title=dict(
+            text="기술 분야(IPC) 분포",
+            font=dict(size=20)
+        ),
+        xaxis=dict(
+            title="IPC 코드",
+            showgrid=True,
+            gridwidth=1,
+            gridcolor='#E4E4E4',
+            tickfont=dict(size=12),
+        ),
+        yaxis=dict(
+            title="특허 건수",
+            showgrid=True,
+            gridwidth=1,
+            gridcolor='#E4E4E4',
+            tickfont=dict(size=12),
+        ),
+        barmode='group',
+        showlegend=True,
+        legend_title="기술 분야",
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        font=dict(
+            color='#2E2E2E',
+            size=14
+        ),
+        margin=dict(t=100)
+    )
+    
+    return fig
+
+def create_status_visualization(status_counts: pd.Series) -> go.Figure:
+    """등록 상태 분포를 시각화합니다."""
+    colors = ['#2196F3', '#FFC107', '#4CAF50', '#F44336']
+    
+    fig = go.Figure(data=[go.Pie(
+        labels=status_counts.index,
+        values=status_counts.values,
+        hole=.3,
+        marker=dict(colors=colors)
+    )])
+    
+    fig.update_layout(
+        title=dict(
+            text="특허 등록 상태 분포",
+            font=dict(size=20)
+        ),
+        showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=-0.2,
+            xanchor="center",
+            x=0.5
+        ),
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        font=dict(
+            color='#2E2E2E',
+            size=14
+        ),
+        margin=dict(t=100, b=100)
+    )
+    
+    return fig
+
 
 def analyze_technology_maturity(df: pd.DataFrame) -> dict:
     """기술 성숙도를 분석합니다."""
@@ -712,24 +771,33 @@ def main():
             tab1, tab2, tab3, tab4 = st.tabs(["기본 통계", "심층 분석", "AI 분석 리포트", "데이터 테이블"])
 
             with tab1:
-                st.subheader("기본 특허 통계")
+                # 시각화 표시
+                st.subheader("데이터 시각화")
+                
+                # 2x2 그리드로 시각화 배치
                 col1, col2 = st.columns(2)
+                
                 with col1:
                     st.plotly_chart(visuals["yearly_trend"], use_container_width=True)
-                    st.plotly_chart(visuals["applicant_trend"], use_container_width=True)
+                    
                 with col2:
-                    st.plotly_chart(visuals["inventor_trend"], use_container_width=True)
                     st.plotly_chart(visuals["status_trend"], use_container_width=True)
-
-                col1, col2, col3, col4 = st.columns(4)
-                with col1:
-                    st.metric("총 출원인 수", len(df['applicantName'].unique()))
-                with col2:
-                    st.metric("총 발명자 수", len(df['inventorName'].unique()))
-                with col3:
-                    st.metric("등록 특허 비율", f"{(df['registerStatus'] == '등록').mean():.1%}")
-                with col4:
-                    st.metric("평균 출원-등록 기간", f"{calculate_avg_registration_period(df):.1f}개월")
+                
+                st.plotly_chart(visuals["ipc_trend"], use_container_width=True)
+                
+                # 주요 통계 지표를 깔끔하게 표시
+                st.subheader("주요 통계")
+                metric_col1, metric_col2, metric_col3 = st.columns(3)
+                
+                with metric_col1:
+                    st.metric("총 특허 수", f"{len(df):,}건")
+                    
+                with metric_col2:
+                    st.metric("출원인 수", f"{len(df['applicantName'].unique()):,}개")
+                    
+                with metric_col3:
+                    avg_period = calculate_avg_registration_period(df)
+                    st.metric("평균 등록 소요 기간", f"{avg_period:.1f}개월")
 
             with tab2:
                 if advanced_analysis:
@@ -739,15 +807,6 @@ def main():
                     st.plotly_chart(ipc_fig, use_container_width=True, key='ipc_analysis')
                     st.subheader("기술 성숙도 분석")
                     st.plotly_chart(maturity_fig, use_container_width=True, key='maturity_analysis')
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.subheader("출원인 협업 네트워크")
-                        collaboration_network = analyze_collaboration_network(df, 'applicantName')
-                        st.plotly_chart(collaboration_network, use_container_width=True, key='applicant_network')
-                    with col2:
-                        st.subheader("발명자 협업 네트워크")
-                        inventor_network = analyze_collaboration_network(df, 'inventorName')
-                        st.plotly_chart(inventor_network, use_container_width=True, key='inventor_network')
 
             with tab3:
                 st.subheader("AI 분석 리포트")
