@@ -770,6 +770,7 @@ def main():
 
             tab1, tab2, tab3, tab4 = st.tabs(["기본 통계", "심층 분석", "AI 분석 리포트", "데이터 테이블"])
 
+
             with tab1:
                 # 시각화 표시
                 st.subheader("데이터 시각화")
@@ -783,7 +784,9 @@ def main():
                 with col2:
                     st.plotly_chart(visuals["status_trend"], use_container_width=True)
                 
-                st.plotly_chart(visuals["ipc_trend"], use_container_width=True)
+                # IPC 분석 그래프는 advanced_analysis가 True일 때만 표시
+                if advanced_analysis:
+                    st.plotly_chart(ipc_fig, use_container_width=True)
                 
                 # 주요 통계 지표를 깔끔하게 표시
                 st.subheader("주요 통계")
