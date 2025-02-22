@@ -690,13 +690,13 @@ def create_visualizations(analysis_data: dict) -> dict:
     )
     fig_yearly.update_layout(
         title="연도별 특허 출원 동향",
-        paper_bgcolor=COLORS["background"],
-        plot_bgcolor=COLORS["background"],
-        font=dict(color=COLORS["text"]),
-        xaxis=dict(gridcolor="rgba(255,255,255,0.1)"),
-        yaxis=dict(gridcolor="rgba(255,255,255,0.1)"),
+        paper_bgcolor='white',
+        plot_bgcolor='white',
+        font=dict(color='black'),
+        xaxis=dict(gridcolor="lightgray"),
+        yaxis=dict(gridcolor="lightgray"),
     )
-
+    
     # 출원인별 특허 수 그래프
     fig_applicant = go.Figure()
     fig_applicant.add_trace(
@@ -708,13 +708,13 @@ def create_visualizations(analysis_data: dict) -> dict:
     )
     fig_applicant.update_layout(
         title="상위 10개 출원인별 특허 수",
-        paper_bgcolor=COLORS["background"],
-        plot_bgcolor=COLORS["background"],
-        font=dict(color=COLORS["text"]),
-        xaxis=dict(gridcolor="rgba(255,255,255,0.1)"),
-        yaxis=dict(gridcolor="rgba(255,255,255,0.1)"),
+        paper_bgcolor='white',
+        plot_bgcolor='white',
+        font=dict(color='black'),
+        xaxis=dict(gridcolor="lightgray"),
+        yaxis=dict(gridcolor="lightgray"),
     )
-
+    
     # 대표발명자별 특허 수 그래프
     fig_inventor = go.Figure()
     fig_inventor.add_trace(
@@ -726,13 +726,13 @@ def create_visualizations(analysis_data: dict) -> dict:
     )
     fig_inventor.update_layout(
         title="상위 10개 대표발명자별 특허 수",
-        paper_bgcolor=COLORS["background"],
-        plot_bgcolor=COLORS["background"],
-        font=dict(color=COLORS["text"]),
-        xaxis=dict(gridcolor="rgba(255,255,255,0.1)"),
-        yaxis=dict(gridcolor="rgba(255,255,255,0.1)"),
+        paper_bgcolor='white',
+        plot_bgcolor='white',
+        font=dict(color='black'),
+        xaxis=dict(gridcolor="lightgray"),
+        yaxis=dict(gridcolor="lightgray"),
     )
-
+    
     # 등록 상태별 분포 그래프
     fig_status = go.Figure()
     fig_status.add_trace(
@@ -744,11 +744,11 @@ def create_visualizations(analysis_data: dict) -> dict:
     )
     fig_status.update_layout(
         title="특허 등록 상태 분포",
-        paper_bgcolor=COLORS["background"],
-        plot_bgcolor=COLORS["background"],
-        font=dict(color=COLORS["text"]),
+        paper_bgcolor='white',
+        plot_bgcolor='white',
+        font=dict(color='black'),
     )
-
+    
     return {
         "yearly_trend": fig_yearly,
         "applicant_trend": fig_applicant,
