@@ -470,7 +470,7 @@ def analyze_technology_maturity(df: pd.DataFrame) -> dict:
 def create_maturity_visualization(maturity_data: dict) -> go.Figure:
     """기술 성숙도 분석 결과를 시각화합니다."""
     years = list(maturity_data.keys())
-    growth_rates = [data['growth_rate'] for data in maturity_data.values()]
+    growth_rates = [data['growth_rate'] * 100 for data in maturity_data.values()]  # 퍼센트로 변환
     counts = [data['patent_count'] for data in maturity_data.values()]
     stages = [data['maturity_stage'] for data in maturity_data.values()]
     
@@ -489,26 +489,62 @@ def create_maturity_visualization(maturity_data: dict) -> go.Figure:
         y=counts,
         name='특허 수',
         yaxis='y1',
-        line=dict(color='#2196F3', width=2)
+        line=dict(color='#2196F3', width=2),
+        marker=dict(size=8)
     ))
     
     # 성장률 막대 그래프
     fig.add_trace(go.Bar(
         x=years,
         y=growth_rates,
-        name='성장률',
+        name='성장률(%)',
         yaxis='y2',
-        marker_color=[stage_colors[stage] for stage in stages]
+        marker_color=[stage_colors[stage] for stage in stages],
+        opacity=0.7
     ))
     
     fig.update_layout(
-        title='기술 성숙도 분석',
-        yaxis=dict(title='특허 수'),
-        yaxis2=dict(title='성장률', overlaying='y', side='right'),
+        title=dict(
+            text="기술 성숙도 분석",
+            font=dict(size=20)
+        ),
+        yaxis=dict(
+            title="특허 수",
+            showgrid=True,
+            gridwidth=1,
+            gridcolor='#E4E4E4',
+            tickfont=dict(size=12)
+        ),
+        yaxis2=dict(
+            title="성장률(%)",
+            overlaying='y',
+            side='right',
+            showgrid=False,
+            tickfont=dict(size=12)
+        ),
+        xaxis=dict(
+            title="연도",
+            showgrid=True,
+            gridwidth=1,
+            gridcolor='#E4E4E4',
+            tickfont=dict(size=12)
+        ),
         showlegend=True,
-        paper_bgcolor=COLORS["background"],
-        plot_bgcolor=COLORS["background"],
-        font=dict(color=COLORS["text"]),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ),
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        font=dict(
+            color='#2E2E2E',
+            size=14
+        ),
+        margin=dict(t=100, r=100),
+        hovermode='x unified'
     )
     
     return fig
